@@ -49,7 +49,7 @@ int sceDisplaySetFrameBuf_patched(const SceDisplayFrameBuf *pParam, int sync) {
 		i = 0;
 		uint32_t* buffer = (uint32_t*)sshot_buffer;
 		uint32_t* framebuf = (uint32_t*)pParam->base;
-		for (y = 0; y<pParam->height; y++){
+		for (y = 1; y<=pParam->height; y++){
 			for (x = 0; x<pParam->pitch; x++){
 				buffer[i] = framebuf[x+(pParam->height-y)*pParam->pitch];
 				uint8_t* clr = (uint8_t*)&buffer[i];
