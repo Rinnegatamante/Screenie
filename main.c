@@ -35,13 +35,13 @@ int sceDisplaySetFrameBuf_patched(const SceDisplayFrameBuf *pParam, int sync) {
 		// Writing Bitmap Header
 		memset(sshot_buffer, 0, 0x36);
 		*((uint16_t*)(&sshot_buffer[0x00])) = 0x4D42;
-		*((uint32_t*)(&sshot_buffer[0x02])) = ((pParam->pitch*pParam->height)<<2)+0x36;
+		*((uint32_t*)(&sshot_buffer[0x02])) = ((pParam->width*pParam->height)<<2)+0x36;
 		*((uint32_t*)(&sshot_buffer[0x0A])) = 0x36;
 		*((uint32_t*)(&sshot_buffer[0x0E])) = 0x28;
-		*((uint32_t*)(&sshot_buffer[0x12])) = pParam->pitch;
+		*((uint32_t*)(&sshot_buffer[0x12])) = pParam->width;
 		*((uint32_t*)(&sshot_buffer[0x16])) = pParam->height;
 		*((uint32_t*)(&sshot_buffer[0x1A])) = 0x00200001;
-		*((uint32_t*)(&sshot_buffer[0x22])) = ((pParam->pitch*pParam->height)<<2);
+		*((uint32_t*)(&sshot_buffer[0x22])) = ((pParam->width*pParam->height)<<2);
 		kuIoWrite(fd, sshot_buffer, 0x36);
 		
 		// Writing Bitmap Table
@@ -50,7 +50,7 @@ int sceDisplaySetFrameBuf_patched(const SceDisplayFrameBuf *pParam, int sync) {
 		uint32_t* buffer = (uint32_t*)sshot_buffer;
 		uint32_t* framebuf = (uint32_t*)pParam->base;
 		for (y = 1; y<=pParam->height; y++){
-			for (x = 0; x<pParam->pitch; x++){
+			for (x = 0; x<pParam->width; x++){
 				buffer[i] = framebuf[x+(pParam->height-y)*pParam->pitch];
 				uint8_t* clr = (uint8_t*)&buffer[i];
 				uint8_t g = clr[1];
