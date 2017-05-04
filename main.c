@@ -53,11 +53,11 @@ int sceDisplaySetFrameBuf_patched(const SceDisplayFrameBuf *pParam, int sync) {
 			for (x = 0; x<pParam->width; x++){
 				buffer[i] = framebuf[x+(pParam->height-y)*pParam->pitch];
 				uint8_t* clr = (uint8_t*)&buffer[i];
+				uint8_t r = clr[0];
 				uint8_t g = clr[1];
-				uint8_t r = clr[2];
+				uint8_t b = clr[2];
 				uint8_t a = clr[3];
-				uint8_t b = clr[0];
-				buffer[i] = (a<<24) | (b<<16) | (g<<8) | r;
+				buffer[i] = (a<<24) | (r<<16) | (g<<8) | b;
 				i++;
 				if (i == (CHUNK_SIZE>>2)){
 					i = 0;
