@@ -34,6 +34,7 @@ target_link_libraries(Screenie
   SceDisplay_stub
   SceCtrl_stub_weak
   SceRtc_stub_weak
+  SceShellSvc_stub
   kuio_stub
   k
   gcc

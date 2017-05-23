@@ -25,6 +25,9 @@ int sceDisplaySetFrameBuf_patched(const SceDisplayFrameBuf *pParam, int sync) {
 	sceCtrlPeekBufferPositive(0, &pad, 1);
 	if ((pad.buttons & SCE_CTRL_SELECT) && (pad.buttons & SCE_CTRL_LTRIGGER) && (pad.buttons & SCE_CTRL_RTRIGGER)){
 		
+		// Locking home button
+		sceShellUtilLock(SCE_SHELL_UTIL_LOCK_TYPE_PS_BTN | SCE_SHELL_UTIL_LOCK_TYPE_QUICK_MENU);
+		
 		// Opening screenshot output file
 		SceDateTime time;
 		sceRtcGetCurrentClockLocalTime(&time);
@@ -70,6 +73,9 @@ int sceDisplaySetFrameBuf_patched(const SceDisplayFrameBuf *pParam, int sync) {
 		// Saving file
 		kuIoClose(fd);
 	
+		// Unlocking home button
+		sceShellUtilUnlock(SCE_SHELL_UTIL_LOCK_TYPE_PS_BTN | SCE_SHELL_UTIL_LOCK_TYPE_QUICK_MENU);
+	
 	}
 	
 	return TAI_CONTINUE(int, refs[0], pParam, sync);
@@ -80,6 +86,9 @@ int module_start(SceSize argc, const void *args) {
 	
 	// Getting game Title ID
 	sceAppMgrAppParamGetString(0, 12, titleid , 256);
+	
+	// Initing sceShellUtil for home button locking
+	sceShellUtilInitEvents(0);
 	
 	kuIoMkdir("ux0:/data/Screenie"); // Just in case the folder doesn't exist
 	
